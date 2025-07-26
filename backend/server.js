@@ -61,16 +61,6 @@ app.get("/", (req, res) => {
   res.send("AAHDC Lottery Platform Backend API is running!");
 });
 
-// =========================================================================
-// Database Synchronization
-// IMPORTANT:
-// In a production serverless application, you typically handle database migrations
-// using a dedicated migration tool (like Sequelize CLI) as a separate step during
-// your CI/CD pipeline or deployment process, rather than running `db.sequelize.sync()`
-// on every function invocation.
-// For this demonstration, we'll keep it here. It will run on the first "cold start"
-// of the serverless function. `force: false` is CRUCIAL to prevent data loss.
-// =========================================================================
 db.sequelize
   .sync({ force: false }) // `force: false` ensures tables are not dropped if they exist
   .then(() => {
@@ -78,12 +68,6 @@ db.sequelize
   })
   .catch((err) => {
     console.error("Unable to sync database:", err);
-    // In a serverless environment, an error here might lead to subsequent
-    // database operations failing for that specific invocation.
   });
 
-// =========================================================================
-// Export the Express app for Vercel
-// Vercel's Node.js runtime expects an exported handler.
-// =========================================================================
 module.exports = app;
