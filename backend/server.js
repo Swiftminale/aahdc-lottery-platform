@@ -1,41 +1,39 @@
 // backend/server.js
-require('dotenv').config(); // Load environment variables first
+require('dotenv').config();
 const express = require('express');
-const cors = require('cors');
+const cors = require('cors'); // Make sure cors is imported
 const db = require('./src/database');
 
-// Import routes
-const unitRoutes = require('./src/routes/unitRoutes');
-const allocationRoutes = require('./src/routes/allocationRoutes');
-const reportRoutes = require('./src/routes/reportRoutes');
+// Define allowed origins
+// IMPORTANT: Replace 'https://aahdc-lottery-platform.vercel.app' with your actual frontend domain on Vercel
+const allowedOrigins = [
+  'http://localhost:3000', // For local development of frontend
+  'https://aahdc-lottery-platform.vercel.app', // Your deployed frontend domain
+  'https://aahdc-lottery.vercel.app' // If your backend might also host the frontend (unlikely for this setup)
+];
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    // or if the origin is in our allowed list.
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Allowed methods
+  credentials: true, // Allow cookies to be sent
+  optionsSuccessStatus: 204 // Some legacy browsers (IE11, various SmartTVs) choke on 200
+};
 
 const app = express();
-// The PORT is not relevant for Vercel serverless functions
 
-// Middleware
-app.use(cors()); // Enable CORS for all origins (for development)
-app.use(express.json()); // For parsing application/json requests
+// Use CORS middleware with specific options
+app.use(cors(corsOptions));
 
-// Use routes
-app.use('/api/units', unitRoutes);
-app.use('/api/allocation', allocationRoutes);
-app.use('/api/reports', reportRoutes);
+app.use(express.json());
 
-// Database synchronization - IMPORTANT:
-// In a production serverless app, you would typically run database migrations
-// as a separate build step (e.g., using Sequelize CLI commands within Vercel's
-// build configuration) rather than on every function invocation (cold start).
-// For this demonstration, we'll keep it here. It will run on the first cold start
-// and subsequent cold starts, which is acceptable for a simple demo but less efficient.
-db.sequelize.sync({ force: false }) // `force: false` is crucial to prevent data loss!
-  .then(() => {
-    console.log('Database synced successfully with Neon PostgreSQL.');
-  })
-  .catch(err => {
-    console.error('Unable to sync database:', err);
-    // In a serverless environment, failure here might not stop the "server"
-    // but will likely cause subsequent database operations to fail.
-  });
+// ... (rest of your server.js code) ...
 
-// Export the app for Vercel
 module.exports = app;
