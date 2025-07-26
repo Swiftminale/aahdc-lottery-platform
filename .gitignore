@@ -1,0 +1,9 @@
+# .gitignore in aahdc-lottery-platform/
+node_modules
+.env
+temp_reports/ # Ignore temporary reports
+# For frontend
+frontend/build
+# For backend
+backend/node_modules
+backend/.env
