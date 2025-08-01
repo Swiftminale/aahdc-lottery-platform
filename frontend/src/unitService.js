@@ -1,6 +1,7 @@
 // frontend/src/services/unitService.js
-const API_URL = 'http://localhost:5000/api/units'; // Ensure this matches your backend port
-
+//const API_URL = 'http://localhost:5000/api/units'; // Ensure this matches your backend port
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000';
+const API_URL = `${API_BASE_URL}/api/units`; // Adjust this specific endpoint for each service file
 export const submitUnits = async (units) => {
   try {
     const response = await fetch(API_URL, {
