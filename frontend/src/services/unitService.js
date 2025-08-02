@@ -1,7 +1,7 @@
 // frontend/src/services/unitService.js
 // Use environment variable for production, fallback to localhost for development
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000';
-const API_URL = `${API_BASE_URL}/units`; // Adjust this specific endpoint for each service file
+const API_URL = `${API_BASE_URL}/api/units`; // Adjust this specific endpoint for each service file
 
 
 export const submitUnits = async (units) => {
