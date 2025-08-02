@@ -20,7 +20,7 @@ export const submitUnits = async (units) => {
     console.error('Error submitting units:', error);
     throw error;
   }
-};
+  };
 
 export const getUnits = async () => {
   try {

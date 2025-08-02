@@ -5,7 +5,6 @@ import { runAllocation } from '../services/allocationService';
 import { downloadExcelReport, downloadPdfReport } from '../services/reportService';
 
 function AAHDCAdminPage() {
-  const [units, setUnits] = useState([]);
   const [allocatedUnits, setAllocatedUnits] = useState([]);
   const [unallocatedUnits, setUnallocatedUnits] = useState([]);
   const [selectedMethod, setSelectedMethod] = useState('');
@@ -17,11 +16,10 @@ function AAHDCAdminPage() {
     setLoading(true);
     try {
       const allUnits = await getUnits();
-      setUnits(allUnits);
       setAllocatedUnits(allUnits.filter(u => u.allocated));
       setUnallocatedUnits(allUnits.filter(u => !u.allocated));
-    } catch (err) {
-      setError(err.message || 'Failed to fetch units.');
+    } catch (error) {
+      setError(error.message || 'Failed to fetch units.');
     } finally {
       setLoading(false);
     }
