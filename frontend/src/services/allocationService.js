@@ -1,7 +1,7 @@
 // frontend/src/services/allocationService.js
 // Use environment variable for production, fallback to localhost for development
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000';
-const API_URL = `${API_BASE_URL}/api/allocation`; // Adjust this specific endpoint for each service file
+const API_URL = `${API_BASE_URL}/allocation`; // Adjust this specific endpoint for each service file
 
 
 export const runAllocation = async (method) => {
